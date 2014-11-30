@@ -20,15 +20,16 @@ sprites = []
 SPRITE_MAX = 50 # スプライトオブジェクトの数
 TEXTURE_SIZE = 256 # テクスチャの幅 (pixel)
 
+# テクスチャの UV テーブル
+spriteUV = ((0,     0, 0.125, 0.1875),
+            (0.125, 0, 0.125, 0.1875),
+            (0.25,  0, 0.125, 0.1875),
+            (0.375, 0, 0.125, 0.1875),
+            (0.5,   0, 0.125, 0.1875),
+            (0.625, 0, 0.125, 0.1875))
+
 # スプライト制御
 class PronamaChanSprite:
-    # テクスチャの UV テーブル
-    spriteUV = ((0,     0, 0.125, 0.1875),
-                (0.125, 0, 0.125, 0.1875),
-                (0.25,  0, 0.125, 0.1875),
-                (0.375, 0, 0.125, 0.1875),
-                (0.5,   0, 0.125, 0.1875),
-                (0.625, 0, 0.125, 0.1875))
 
     # 開始設定（今回の場合、x 座標の初期値だけ外部から指定する）
     def setup(self, x):
@@ -50,8 +51,6 @@ class PronamaChanSprite:
             # 左側に移動したら位置を再設定
             self.setup(1 + self.scale * 0.125 * aspect) # 0.125 はテクスチャ内でのキャラの横幅
 
-    def get_uv(self):
-        return spriteUV[self.current_index]
 
 # ビューポートの設定
 def view_setup():    
@@ -84,11 +83,12 @@ def draw_sprite(sprite, region):
     sprite.update(aspect) 
 
     # UV 情報
-    spriteUV = sprite.get_uv()
-    sprtU = spriteUV[0]
-    sprtV = spriteUV[1]
-    sprtW = spriteUV[2]
-    sprtH = spriteUV[3]
+    i = sprite.current_index
+    global spriteUV
+    sprtU = spriteUV[i][0]
+    sprtV = spriteUV[i][1]
+    sprtW = spriteUV[i][2]
+    sprtH = spriteUV[i][3]
 
     # 頂点情報
     vertW = sprtW * sprite.scale * aspect
